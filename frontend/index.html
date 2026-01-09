@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shadow AI</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="app">
+
+    <!-- Title -->
+    <h1 class="title">Shadow AI</h1>
+    <p class="subtitle">Think deeper. Decide smarter.</p>
+
+    <!-- Decision Input -->
+    <textarea
+      id="decisionInput"
+      placeholder="Type your decision here..."
+    ></textarea>
+
+    <!-- Emotion Selector -->
+    <div class="emotions">
+      <button class="emotion active" data-emotion="neutral">😐 Neutral</button>
+      <button class="emotion" data-emotion="happy">😊 Happy</button>
+      <button class="emotion" data-emotion="sad">😔 Sad</button>
+      <button class="emotion" data-emotion="angry">😠 Angry</button>
+      <button class="emotion" data-emotion="confused">😵 Confused</button>
+    </div>
+
+    <!-- Analyze Button -->
+    <button id="analyzeBtn">Analyze</button>
+
+    <!-- Result -->
+    <div id="result" class="result hidden"></div>
+
+  </div>
+
+  <!-- JS -->
+  <script src="script.js"></script>
+</body>
+</html>
