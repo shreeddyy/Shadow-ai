@@ -39,7 +39,7 @@ analyzeButton.addEventListener("click", async () => {
   resultBox.innerHTML = "🧠 Shadow AI is thinking calmly...";
 
   try {
-    const response = await fetch("http://localhost:3000/analyze", {
+    const response = await fetch("https://shadow-ai-qauz.onrender.com/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -71,3 +71,4 @@ analyzeButton.addEventListener("click", async () => {
       "⚠️ Something went wrong. Please make sure the backend is running and try again.";
   }
 });
+
