@@ -45,11 +45,26 @@ Advice:
       }
     );
 
-    const data = await response.json();
 
-    const text =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-      "No response from AI.";
+const data = await response.json();
+
+console.log("Gemini raw response:", JSON.stringify(data, null, 2));
+
+let text = "No response from AI.";
+
+if (data?.candidates?.length > 0) {
+  const parts = data.candidates[0].content?.parts;
+  if (parts && parts.length > 0) {
+    text = parts.map(p => p.text).join("\n");
+  }
+}
+
+res.json({
+  risk: "See analysis below",
+  analysis: text,
+  suggestion: "Reflect calmly before deciding"
+});
+;
 
     res.json({
       risk: "See analysis below",
@@ -67,3 +82,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
+
