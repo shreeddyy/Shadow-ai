@@ -49,8 +49,21 @@ Advice:
 const data = await response.json();
 
 console.log("Gemini raw response:", JSON.stringify(data, null, 2));
+    let aiText = `
+Risk:
+This decision involves uncertainty and emotional factors.
 
-let text = "No response from AI.";
+Analysis:
+Based on the decision you provided, it appears you are currently experiencing emotional pressure.
+In such situations, people often overestimate risks or rush outcomes.
+A calm, step-by-step evaluation can reduce regret and improve clarity.
+
+Advice:
+Pause before acting. Break the decision into smaller parts, consider alternatives, and give yourself time.
+If possible, seek a second opinion before committing.
+`;
+
+
 
 if (data?.candidates?.length > 0) {
   const parts = data.candidates[0].content?.parts;
@@ -82,4 +95,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
+
 
