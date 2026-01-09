@@ -1,34 +1,37 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import fetch from "node-fetch";
+import dotenv from "dotenv";
 
 dotenv.config();
 
 const app = express();
+
+// ✅ MIDDLEWARE (VERY IMPORTANT)
 app.use(cors());
 app.use(express.json());
 
-// Health check (IMPORTANT)
+// ✅ HEALTH CHECK
 app.get("/", (req, res) => {
   res.send("✅ Shadow AI backend is running");
 });
 
+// ✅ ANALYZE ROUTE
 app.post("/analyze", async (req, res) => {
   try {
     const { decision, emotion } = req.body;
 
     if (!decision) {
-      return res.status(400).json({ error: "Decision missing" });
+      return res.status(400).json({ error: "Decision is required" });
     }
 
     const prompt = `
-You are Shadow AI.
+You are Shadow AI, an intelligent decision assistant.
 
 Decision: ${decision}
 Emotion: ${emotion || "Neutral"}
 
-Reply in simple plain text with:
+Reply clearly in this format:
 Risk:
 Analysis:
 Advice:
@@ -45,55 +48,45 @@ Advice:
       }
     );
 
+    const data = await response.json();
 
-const data = await response.json();
-
-console.log("Gemini raw response:", JSON.stringify(data, null, 2));
+    // ✅ DEFAULT FALLBACK (GUARANTEED OUTPUT)
     let aiText = `
 Risk:
 This decision involves uncertainty and emotional factors.
 
 Analysis:
-Based on the decision you provided, it appears you are currently experiencing emotional pressure.
-In such situations, people often overestimate risks or rush outcomes.
-A calm, step-by-step evaluation can reduce regret and improve clarity.
+You may be feeling pressure or confusion while making this choice.
+Such situations often benefit from slowing down and examining all options logically.
 
 Advice:
-Pause before acting. Break the decision into smaller parts, consider alternatives, and give yourself time.
-If possible, seek a second opinion before committing.
+Pause, write down pros and cons, and avoid making impulsive decisions.
+If possible, consult someone you trust before proceeding.
 `;
 
+    // ✅ USE GEMINI RESPONSE IF AVAILABLE
+    if (data?.candidates?.length > 0) {
+      const parts = data.candidates[0].content?.parts;
+      if (parts && parts.length > 0) {
+        aiText = parts.map(p => p.text).join("\n");
+      }
+    }
 
-
-if (data?.candidates?.length > 0) {
-  const parts = data.candidates[0].content?.parts;
-  if (parts && parts.length > 0) {
-    text = parts.map(p => p.text).join("\n");
-  }
-}
-
-res.json({
-  risk: "See analysis below",
-  analysis: text,
-  suggestion: "Reflect calmly before deciding"
-});
-;
-
+    // ✅ SEND RESPONSE ONCE
     res.json({
       risk: "See analysis below",
-      analysis: text,
+      analysis: aiText,
       suggestion: "Reflect calmly before deciding"
     });
 
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "AI failed" });
+  } catch (error) {
+    console.error("Analyze error:", error);
+    res.status(500).json({ error: "AI processing failed" });
   }
 });
 
+// ✅ START SERVER
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
-
-
