@@ -16,3 +16,5 @@ Confused or anxious
 Under time pressure
 
 Traditional AI tools give generic answers and ignore emotional context, which can lead to poor or impulsive decisions.
+• Robust fallback mechanism ensures decision guidance even during AI service downtime
+
